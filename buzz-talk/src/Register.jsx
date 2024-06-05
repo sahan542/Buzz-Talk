@@ -1,18 +1,21 @@
 import axios from "axios";
-import { useState } from "react";
+import { useContext, useState } from "react";
+import { UserContext } from "./UserContext";
 
 export default function Register(){
     const [username, setUsername] = useState('');
     const [password, setPassword] = useState('');
+    const {setUsername:setLoggedInUsername, setId} = useContext(UserContext);
 
     async function register(ev){
         ev.preventDefault();  
         try{
-            const response = await axios.post('/register', {
+            const {data} = await axios.post('/register', {
                 username,
                 password,
             }, { withCredentials: true});
-            console.log(response.data);
+        setLoggedInUsername(username);
+        setId(data.id);
         }
         catch(error){
             console.error("Error Registering :", error);

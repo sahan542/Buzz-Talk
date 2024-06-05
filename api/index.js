@@ -41,7 +41,10 @@ app.post('/register', async (req, res) => {
     const createdUser = await User.create({ username, password });
     jwt.sign({ userId: createdUser._id }, jwtSecret, {}, (err, token) => {
       if (err) throw err;
-      res.status(201).json({ message: 'User created', token });
+      res.cookie('token', token).status(201).json({ 
+        id: createdUser._id,
+
+    });
     });
   } catch (err) {
     console.error('Error in /register:', err);
