@@ -1,14 +1,12 @@
 import './App.css'
+import Register from './Register'
 
 function App() {
 
 
   return (
     <>
-      <div className="bg-green-500
-      ">
-          test
-      </div>
+      <Register/>
     </>
   )
 }
