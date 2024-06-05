@@ -35,6 +35,21 @@ app.get('/test', (req, res) => {
   res.json('test ok');
 });
 
+//get profile
+app.get('/profile', (req,res) => {
+    const token = req.cookies?.token;
+    if(token){
+        jwt.verify(token, jwtSecret, {}, (err, userData) => {
+            if(err) throw err;
+            res.json(userData);
+        });
+    }
+    else{
+        res.status(401).json('no token');
+    } 
+});
+
+//register new user
 app.post('/register', async (req, res) => {
   const { username, password } = req.body;
   try {
@@ -43,6 +58,7 @@ app.post('/register', async (req, res) => {
       if (err) throw err;
       res.cookie('token', token).status(201).json({ 
         id: createdUser._id,
+        username,
 
     });
     });
