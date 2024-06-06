@@ -16,8 +16,8 @@ export default function RegisterAndLoginForm(){
                 username,
                 password,
             }, { withCredentials: true});
-        setLoggedInUsername(username);
-        setId(data.id);
+            setLoggedInUsername(username);
+            setId(data.id);
         }
         catch(error){
             console.error("Error Registering :", error);
