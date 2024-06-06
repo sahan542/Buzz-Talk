@@ -7,8 +7,20 @@ export default function Chat(){
        setWs(ws);
        ws.addEventListener('message',handleMessage);
     }, []);
-    function handleMessage(e) {
-        console.log('new message', e);
+
+    function showOnlinePeople(people){
+        console.log(people);
+    }
+    function handleMessage(ev) {
+        const messageData = JSON.parse(ev.data)
+        if('online' in messageData){
+            showOnlinePeople(messageData.online);
+        }
+        /*
+        e.data.text().then(messageString => {
+            console.log(messageString);
+        });
+        */
     }
 
     return(
