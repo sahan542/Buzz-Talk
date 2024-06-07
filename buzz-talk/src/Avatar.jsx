@@ -1,14 +1,14 @@
-export default function Avatar({userId,username}){
+export default function Avatar({ userId, username }) {
+    const colors = ['bg-red-200', 'bg-green-200', 'bg-purple-500', 'bg-yellow-500', 'bg-red-500', 'bg-blue-200'];
+    const userIdBase10 = parseInt(userId, 16);
+    const colorIndex = userIdBase10 % colors.length; // Corrected calculation of colorIndex
+    const color = colors[colorIndex];
 
-    const colors = ['bg-red-200', 'bg-green-200','bg-purple-200','bg-yellow-200']
-
-    return(
-        <div className="w-8 h-8 bg-red-300 rounded-full flex items-center">
-            <div className="text-center w-full">
+    return (
+        <div className={`w-8 h-8 rounded-full flex items-center ${color}`}> {/* Added a space between classes */}
+            <div className="text-center w-full opacity-40">
                 {username[0]}
             </div>
-
-
         </div>
-    )
+    );
 }
