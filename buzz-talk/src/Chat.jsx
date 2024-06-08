@@ -24,12 +24,13 @@ export default function Chat(){
         setOnlinePeople(people);
     }
     function handleMessage(ev) {
-        const messageData = JSON.parse(ev.data)
+        const messageData = JSON.parse(ev.data);
+        console.log({ev,messageData});
         if('online' in messageData){
             showOnlinePeople(messageData.online);
         }
         else{
-            console.log({messageData});
+            setMessages(prev => ([...prev, {isOur:false,text:messageData.text}]));
         }
         /*
         e.data.text().then(messageString => {
@@ -51,6 +52,8 @@ export default function Chat(){
     const onlinePeopleExclOurUser = {...onlinePeople};
     delete onlinePeopleExclOurUser[id]; // Corrected line
    // console.log({onlinePeopleExclOurUser});
+
+   const messagesWithoutDupes = messages;
     
 
 
