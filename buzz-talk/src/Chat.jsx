@@ -90,16 +90,18 @@ export default function Chat(){
                         </div>
                     )}
                     {!!selectedUserId && (
-                        <div className="overflow-y-scroll">
-                            {messagesWithoutDupes.map(message => (
-                                <div key={id} className={"" +(message.sender === id ? 'text-right' : 'text-left')}>
-                                    <div className={"text-left inline-block p-2 my-2 rounded-lg text-sm " +(message.sender === id ? 'bg-blue-500 text-white' : 'bg-white text-gray-500')}>
-                                    sender:{message.sender} <br/>
-                                    my id: {id} <br/>
-                                    {message.text}
+                        <div className="relative h-full" >
+                            <div className="overflow-y-scroll absolute inset-0">
+                                {messagesWithoutDupes.map(message => (
+                                    <div className={(message.sender === id ? 'text-right' : 'text-left')} key={id}>
+                                        <div className={"text-left inline-block p-2 my-2 rounded-lg text-sm " +(message.sender === id ? 'bg-blue-500 text-white' : 'bg-white text-gray-500')}>
+                                        sender:{message.sender} <br/>
+                                        my id: {id} <br/>
+                                        {message.text}
+                                        </div>
                                     </div>
-                                </div>
-                            ))}
+                                ))}
+                            </div>
                         </div>
                     )}
                 </div>
