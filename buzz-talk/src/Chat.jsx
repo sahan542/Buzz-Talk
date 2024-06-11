@@ -2,6 +2,7 @@ import { useContext, useEffect, useState } from "react"
 import Avatar from "./Avatar";
 import Logo from "./Logo";
 import { UserContext } from "./UserContext";
+import uniqBy from "lodash/uniqBy";
 
 export default function Chat(){
     const [ws, setWs] = useState(null);
@@ -29,8 +30,8 @@ export default function Chat(){
         if('online' in messageData){
             showOnlinePeople(messageData.online);
         }
-        else{
-            setMessages(prev => ([...prev, {isOur:false,text:messageData.text}]));
+        else if('text' in messageData){
+            setMessages(prev => ([...prev, {...messageData}]));
         }
         /*
         e.data.text().then(messageString => {
@@ -46,14 +47,18 @@ export default function Chat(){
             text: newMessageText,
         }));
         setNewMessageText('');
-        setMessages(prev => ([...prev,{text: newMessageText, isOur:true}]));
+        setMessages(prev => ([...prev,
+            {text: newMessageText, 
+             sender: id,
+             recipient: selectedUserId,
+            }]));
     }
 
     const onlinePeopleExclOurUser = {...onlinePeople};
     delete onlinePeopleExclOurUser[id]; // Corrected line
    // console.log({onlinePeopleExclOurUser});
 
-   const messagesWithoutDupes = messages;
+   const messagesWithoutDupes = uniqBy(messages, 'id');
     
 
 
@@ -77,6 +82,7 @@ export default function Chat(){
             </div>
             <div className="flex flex-col bg-blue-300 w-2/3 p-4">
                 <div className="flex-grow">
+                    
                     {!selectedUserId && (
                         <div className="flex h-full flex-grow items-center justify-center">
                             <div className="text-gray-800">&larr; Select a person from the slidebar</div>
@@ -84,8 +90,12 @@ export default function Chat(){
                     )}
                     {!!selectedUserId && (
                         <div>
-                            {messages.map(message => (
-                                <div>{message.text}</div>
+                            {messagesWithoutDupes.map(message => (
+                                <div key={id} className={" " +(message.sender === id ? 'bg-blue-500 text-white' : 'bg-white text-gray-500')}>
+                                   sender:{message.sender} <br/>
+                                   my id: {id} <br/>
+                                   {message.text}
+                                </div>
                             ))}
                         </div>
                     )}
