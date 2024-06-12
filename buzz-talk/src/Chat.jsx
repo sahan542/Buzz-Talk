@@ -21,7 +21,12 @@ export default function Chat(){
         const ws = new WebSocket('ws://localhost:4040');
         setWs(ws);
         ws.addEventListener('message',handleMessage);
-        ws.addEventListener('close', () => connectToWs());
+        ws.addEventListener('close', () =>{
+            setTimeout(() => {
+                console.log('Disconnected.Trying to reconnect.');
+                connectToWs();
+            }, 1000);
+        });
     }
 
     function showOnlinePeople(peopleArray){
@@ -72,15 +77,18 @@ export default function Chat(){
 
     useEffect(() => {
         if(selectedUserId){
-            axios.get('/messages/'+selectedUserId).then()
+            axios.get('/messages/'+selectedUserId).then(res => {
+                setMessages(res.data);
+                console.log(res.data);
+            });
         }
-    })
+    }, [selectedUserId]);
 
     const onlinePeopleExclOurUser = {...onlinePeople};
     delete onlinePeopleExclOurUser[id]; // Corrected line
    // console.log({onlinePeopleExclOurUser});
 
-   const messagesWithoutDupes = uniqBy(messages, 'id');
+   const messagesWithoutDupes = uniqBy(messages, '_id');
     
 
 
