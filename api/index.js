@@ -131,6 +131,11 @@ app.post('/login', async(req,res) => {
     }
 });
 
+//logout 
+app.post('/logout', async(req,res) => {
+  res.cookie('token', '', {sameSite:'none', secure:true}).json('ok');
+});
+
 /*
 const port = process.env.PORT || 4040;
 app.listen(port, () => {
