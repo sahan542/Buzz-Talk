@@ -70,6 +70,11 @@ app.get('/messages/:userId', async(req,res) => {
   res.json(messages);
 });
 
+app.get('/people', async(req,res) => {
+  const users = await User.find({}, {'_id':1,username:1});
+  res.json(users);
+})
+
 //get profile
 app.get('/profile', (req,res) => {
     const token = req.cookies?.token;
@@ -137,6 +142,9 @@ const server = app.listen(4040);
 
 const wss = new ws.WebSocketServer({server});
 wss.on('connection', (connection, req) => {
+
+  connection.isAlive = true;
+
     const cookies = req.headers.cookie;
     if(cookies){
         const tokenCookieString = cookies.split(';').find(str => str.startsWith('token='));
@@ -186,6 +194,8 @@ wss.on('connection', (connection, req) => {
     });
 });
 
-
+wss.on('close', data => {
+  console.log('disconnect',data);
+})
 
 //PS C:\Users\acer\Documents\Buzz-Talk\api> nodemon index.js
