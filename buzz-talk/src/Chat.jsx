@@ -113,11 +113,12 @@ export default function Chat(){
 
     return(
         <div className="flex h-screen">
-            <div className="bg-blue-100 w-1/3 pl-4 pt-4">
+            <div className="bg-blue-100 w-1/3 pl-4 pt-4 flex flex-col relative h-full mb-4">
+                <div className="flex-grow overflow-y-scroll absolute top-0 right-0 left-0 bottom-2">
+
+              
                 <Logo/>
-                <div className="relative h-full mb-4">
-                    <div className="overflow-y-scroll absolute top-0 right-0 left-0 bottom-2">
-                        {Object.keys(onlinePeopleExclOurUser).map(userId => (
+                {Object.keys(onlinePeopleExclOurUser).map(userId => (
                             <Contact
                                 key={userId}
                                 id={userId} 
@@ -137,7 +138,11 @@ export default function Chat(){
                                 online={false}
                                 />
                         ))}
-                    </div>
+
+                
+                <div className="p-2 text-center">
+                    <button className="text-sm text-white bg-blue-600 p-2">Logout</button>
+                </div>
                 </div>
             </div>
             <div className="flex flex-col bg-blue-300 w-2/3 p-4">
