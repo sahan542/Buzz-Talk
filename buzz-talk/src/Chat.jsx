@@ -45,7 +45,10 @@ export default function Chat(){
             showOnlinePeople(messageData.online);
         }
         else if('text' in messageData){
-            setMessages(prev => ([...prev, {...messageData}]));
+            if(messageData.sender === selectedUserId){
+                setMessages(prev => ([...prev, {...messageData}]));
+            }
+           
         }
         /*
         e.data.text().then(messageString => {
@@ -100,10 +103,9 @@ export default function Chat(){
 
     useEffect(() => {
         const div = divUnderMessages.current;
-        if(div){
-            div.scrollIntoView({behavior:'smooth', block:'end'});
+        if (div) {
+            div.scrollIntoView({ behavior: 'smooth', block: 'end' });
         }
-
     }, [messages]);
 
     useEffect(() =>{
@@ -132,10 +134,10 @@ export default function Chat(){
     }, [selectedUserId]);
 
     const onlinePeopleExclOurUser = {...onlinePeople};
-    delete onlinePeopleExclOurUser[id]; // Corrected line
+    delete onlinePeopleExclOurUser[id];// Corrected line
    // console.log({onlinePeopleExclOurUser});
 
-   const messagesWithoutDupes = uniqBy(messages, '_id');
+   const messagesWithoutDupes = uniqBy(messages, '_id'); 
     
 
 
