@@ -3,6 +3,7 @@ import Avatar from "./Avatar";
 import Logo from "./Logo";
 import { UserContext } from "./UserContext";
 import uniqBy from "lodash/uniqBy";
+import axios from "axios";
 
 export default function Chat(){
     const [ws, setWs] = useState(null);
@@ -13,10 +14,15 @@ export default function Chat(){
     const {username,id} = useContext(UserContext);
     const divUnderMessages = useRef();
     useEffect(() =>{
-        const ws = new WebSocket('ws://localhost:4040');
-       setWs(ws);
-       ws.addEventListener('message',handleMessage);
+       connectToWs();
     }, []);
+
+    function connectToWs(){
+        const ws = new WebSocket('ws://localhost:4040');
+        setWs(ws);
+        ws.addEventListener('message',handleMessage);
+        ws.addEventListener('close', () => connectToWs());
+    }
 
     function showOnlinePeople(peopleArray){
         const people = {};
@@ -63,6 +69,12 @@ export default function Chat(){
         }
 
     }, [messages]);
+
+    useEffect(() => {
+        if(selectedUserId){
+            axios.get('/messages/'+selectedUserId).then()
+        }
+    })
 
     const onlinePeopleExclOurUser = {...onlinePeople};
     delete onlinePeopleExclOurUser[id]; // Corrected line

@@ -37,8 +37,38 @@ app.use(cors({
   origin: "http://localhost:5173",
 }));
 
+async function getUserDataFromRequest(req){
+  return new Promise((resolve, reject) => {
+    const token = req.cookies?.token;
+     if(token){
+    jwt.verify(token, jwtSecret, {}, (err, userData) => {
+      if(err) throw err;
+      resolve(userData);
+    });
+    }
+    else{
+      reject('no token');
+    }
+  })
+  
+}
+
 app.get('/test', (req, res) => {
   res.json('test ok');
+});
+
+//get messages
+app.get('/messages/:userId', async(req,res) => {
+  const {userId} = req.params;
+  const userData =  await getUserDataFromRequest(req);
+  const ourUserId = userData.userId;
+  console.log({userId, ourUserId});
+  const messages = await Message.find({
+    sender:{$in:[userId,ourUserId]},
+    recipient:{$in:[userId,ourUserId]},
+  }).sort({createdAt:-1})
+  .exec();
+  res.json(messages);
 });
 
 //get profile
