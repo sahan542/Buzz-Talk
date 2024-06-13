@@ -17,7 +17,7 @@ export default function Chat(){
     const [offlinePeople, setOfflinePeople] = useState({});
     useEffect(() =>{
        connectToWs();
-    }, []);
+    }, [selectedUserId]);  //in case please remove the selectedUserId 
 
     function connectToWs(){
         const ws = new WebSocket('ws://localhost:4040');
